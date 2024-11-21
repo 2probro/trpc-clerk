@@ -12,6 +12,12 @@ import { ZodError } from "zod";
 
 import { db } from "@/server/db";
 
+// import * as trpcNext from "@trpc/server/adapters/next";
+
+// manually added imports
+import { getAuth } from "@clerk/nextjs/server";
+import { TRPCError } from "@trpc/server";
+
 /**
  * 1. CONTEXT
  *
@@ -25,8 +31,11 @@ import { db } from "@/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const auth = getAuth(opts.headers); // I added this
+
   return {
     db,
+    auth,
     ...opts,
   };
 };
@@ -79,22 +88,22 @@ export const createTRPCRouter = t.router;
  * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
  * network latency that would occur in production but not in local development.
  */
-const timingMiddleware = t.middleware(async ({ next, path }) => {
-  const start = Date.now();
+// const timingMiddleware = t.middleware(async ({ next, path }) => {
+//   const start = Date.now();
 
-  if (t._config.isDev) {
-    // artificial delay in dev
-    const waitMs = Math.floor(Math.random() * 400) + 100;
-    await new Promise((resolve) => setTimeout(resolve, waitMs));
-  }
+//   if (t._config.isDev) {
+//     // artificial delay in dev
+//     const waitMs = Math.floor(Math.random() * 400) + 100;
+//     await new Promise((resolve) => setTimeout(resolve, waitMs));
+//   }
 
-  const result = await next();
+//   const result = await next();
 
-  const end = Date.now();
-  console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
+//   const end = Date.now();
+//   console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
 
-  return result;
-});
+//   return result;
+// });
 
 /**
  * Public (unauthenticated) procedure
@@ -103,4 +112,39 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure.use(timingMiddleware);
+export const publicProcedure = t.procedure;
+
+// manually added this code
+
+// Check if user is authenticated and has permission
+
+const isAuthed = t.middleware(({ next, ctx }) => {
+  if (!ctx.auth.userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      auth: ctx.auth,
+    },
+  });
+});
+
+const isStaff = t.middleware(async ({ next, ctx }) => {
+  const hasPermission = ctx.auth.has({ permission: "org:access:editor" });
+
+  if (!hasPermission) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+      message: "Staff access required",
+    });
+  }
+
+  return next({
+    ctx: {
+      auth: ctx.auth,
+    },
+  });
+});
+
+export const staffProcedure = t.procedure.use(isAuthed).use(isStaff);
