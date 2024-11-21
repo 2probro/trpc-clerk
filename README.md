@@ -1,10 +1,6 @@
-# I want to use TRPC with Clerk authentication
+# I want to use TRPC with Clerk authentication (T3 Stack)
 
-# This is a T3 Stack project with Clerk authentication
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
+- [Next.js (App Router)](https://nextjs.org)
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
