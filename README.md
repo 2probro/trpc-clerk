@@ -20,6 +20,6 @@
 Someone may be able to solve this without running the code, if not, you have to do the following to get up and running:
 
 1) Create a postgres database (I just made a new project on SupaBase for this)
-2) Add the Enviroment Variable ``` DATABASE_URL=****```
+2) Add the Enviroment Variable ```DATABASE_URL=****```
 3) ```npm run db:push```
 4) npm run dev
