@@ -2,7 +2,7 @@
 
 # This is a T3 Stack project with Clerk authentication
 
-- [Next.js](https://nextjs.org)
+- [Next.js (App Router)](https://nextjs.org)
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
