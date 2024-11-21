@@ -1,6 +1,4 @@
-# I want to use TRPC with Clerk authentication
-
-# This is a T3 Stack project with Clerk authentication
+# I want to use TRPC with Clerk authentication (T3 Stack)
 
 - [Next.js (App Router)](https://nextjs.org)
 - [Drizzle](https://orm.drizzle.team)
