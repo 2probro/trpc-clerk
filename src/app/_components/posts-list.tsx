@@ -11,7 +11,7 @@ export function PostsList() {
     <div className="flex flex-col gap-4">
       {posts?.map((post) => (
         <div key={post.id} className="rounded-lg bg-white/10 p-4">
-          <p>{post.name}</p>
+          <p>{post.content}</p>
         </div>
       ))}
     </div>
