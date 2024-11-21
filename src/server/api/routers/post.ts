@@ -5,10 +5,10 @@ import { posts } from "@/server/db/schema";
 
 export const postRouter = createTRPCRouter({
   create: staffProcedure
-    .input(z.object({ name: z.string().min(1) }))
+    .input(z.object({ content: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(posts).values({
-        name: input.name,
+        content: input.content,
         authorId: ctx.auth.userId,
       });
     }),

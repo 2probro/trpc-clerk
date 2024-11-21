@@ -13,6 +13,6 @@ export const createTable = pgTableCreator((name) => `trpc-clerk_${name}`);
 
 export const posts = createTable("post", {
   id: integer("id").primaryKey(),
-  name: text("name").notNull(),
+  content: text("content").notNull(),
   authorId: text("author_id").notNull(),
 });

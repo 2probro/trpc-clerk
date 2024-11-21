@@ -4,10 +4,10 @@ import { useState } from "react";
 import { api } from "@/trpc/react";
 
 export function CreatePost() {
-  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const createPost = api.post.create.useMutation({
     onSuccess: () => {
-      setTitle("");
+      setContent("");
     },
   });
 
@@ -15,15 +15,15 @@ export function CreatePost() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ name: title });
+        createPost.mutate({ content: content });
       }}
       className="flex gap-2"
     >
       <input
         type="text"
         placeholder="New post..."
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
         className="rounded-md px-4 py-2 text-black"
       />
       <button
